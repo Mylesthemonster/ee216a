@@ -7,7 +7,7 @@
 // Description:
 // ALU for HW2
 //
-// Parameters: 
+// Parameters:
 //
 // Inputs:
 // CLK, RESET, DATA_A, DATA_B, INST
@@ -33,9 +33,12 @@ wire [15:0] out_inst_4; // Wire carrys output when inst_1 casevalue equals 4
 wire [15:0] out_inst_5; // Wire carrys output when inst_1 casevalue equals 5
 wire [15:0] out_inst_6; // Wire carrys output when inst_1 casevalue equals 6
 wire [15:0] out_inst_7; // Wire carrys output when inst_1 casevalue equals 7
-reg [15:0] ALU_out_inst; // Wire carrys output of chosen ALU function
-wire [15:0] ALU_d2_w;
-reg [15:0] ALU_d2_r;
+reg [15:0] ALU_out_inst; // Register that holds output of chosen ALU function
+wire [15:0] ALU_d2_w; // Wire that carries output of ALU
+reg [15:0] ALU_d2_r; // Register that holds ALU out info
+reg [7:0] Data_A_o_r; // Register that holds Data A
+reg [7:0] Data_B_o_r; // Register that holds Data B
+reg [2:0] Inst_o_r; // Register that holds Instruction Value
 ////////////////////////////////////////////////////////////////
 // Combinational Logic
 assign ALU_d2_w = ALU_out_inst;
@@ -43,15 +46,15 @@ assign data_o = ALU_d2_r;
 // The output MUX
 always @(*) begin
 case(inst_i)
-3 'b000: ALU_out_inst = data_a_i + data_b_i; // Unsigned Addition
-3 'b001: ALU_out_inst = data_a_i - data_b_i; // Unsigned Subtraction
-3 'b010: ALU_out_inst = data_a_i * data_b_i; // Unsigned Multiplication
-3 'b011: ALU_out_inst = data_a_i & data_b_i; // Bitwise AND
-3 'b100: ALU_out_inst = data_a_i ^ data_b_i; // Bitwise XOR
-3 'b101: ALU_out_inst = data_a_i[7] ? -data_a_i : data_a_i; // |a| --> If MSB of a is 1 (neg) flip sign else stay keep pos value 
-3 'b110: ALU_out_inst = (data_a_i - data_b_i) << 2; // Subtract and mulpily by 4 (left shift by 2 which is multiply by 2^2 = 4)
-3 'b111: ; // Unused Case
-default: $display("Error"); // Default case display to user something went wrong 
+3 'b000: ALU_out_inst = Data_A_o_r + Data_B_o_r; // Unsigned Addition
+3 'b001: ALU_out_inst = Data_A_o_r - Data_B_o_r; // Unsigned Subtraction
+3 'b010: ALU_out_inst = Data_A_o_r * Data_B_o_r; // Unsigned Multiplication
+3 'b011: ALU_out_inst = Data_A_o_r & Data_B_o_r; // Bitwise AND
+3 'b100: ALU_out_inst = Data_A_o_r ^ Data_B_o_r; // Bitwise XOR
+3 'b101: ALU_out_inst = Data_A_o_r[7] ? -Data_A_o_r : Data_A_o_r; // |a| --> If MSB of a is 1 (neg) flip sign else stay keep pos value
+3 'b110: ALU_out_inst = ((Data_A_o_r - Data_B_o_r) << 2); // Subtract and mulpily by 4 (left shift by 2 which is multiply by 2^2 = 4)
+3 'b111: ALU_out_inst = {(16){1'b0}}; // Unused Case
+default: ALU_out_inst = {(16){1'b0}}; // Default case
 endcase
 end
 ////////////////////////////////////////////////////////////////
