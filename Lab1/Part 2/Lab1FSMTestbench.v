@@ -25,11 +25,11 @@ module Lab1FSMTestbench();
 	wire			Out;
 	wire[2:0]		State;
 	integer 		i, j;
-	reg [0:7] 		TestValues [0:7];
+	reg [0:7] 		TestValues [0:255];
 	
 	
 	//----------------------------------------------------------------
-	//		FSM Model
+	//		FSM Model - 1010 Sequence
 	//----------------------------------------------------------------
 	Lab1FSM		DUT(.Clock(Clock), .Reset(Reset), .In(In), .Out(Out), .State(State));
 
@@ -53,12 +53,15 @@ module Lab1FSMTestbench();
 		// Read the file "TestValues.txt" and put the values
 		// in 'TestValueArray'
 		$readmemb("TextValues.txt", TestValues);
+
+		Reset = 0; // Initailze Reset as 0
 		
 		// Outer for loop iterates through each 8- bit chunk
-		for (i = 0; i < 8; i = i + 1) begin
+		for (i = 0; i < 256; i = i + 1) begin
 			// Inner for loop iterates through each bit
 			for (j = 0; j < 8; j = j + 1) begin
-				$display ("TextValues[%d][%d] = %b", i, j, TestValues[i][j]);
+				#10 In = TestValues[i][j]; // Input the bit sequence of the textvalues into the FSM
+				$display ("TextValues[%d][%d] = %b, State = %d, Output = %d", i, j, TestValues[i][j], State, Out); 
 			end
 		end
 	
