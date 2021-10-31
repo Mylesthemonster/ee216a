@@ -25,7 +25,11 @@ module Lab1AdderTestbench();
 	reg	[7:0]		A, B;
 	wire[7:0]		Sum;
   	reg	[15:0]		testcase;
+
 	
+	// Testing Adder Correctness
+	wire[7:0]		right_answer;
+	assign			right_answer = A + B;
 	
 	//----------------------------------------------------------------
 	//		Adder Model
@@ -55,10 +59,15 @@ module Lab1AdderTestbench();
 			A =			testcase[15:8];
 			B =			testcase[7:0];
 			#(Cycle);
-			$display ("    A   = %d:", A);
-			$display ("    B   = %d:", B);
-			$display ("    Sum = %d:", Sum);
+			//$display ("    A   = %d:", A);
+			//$display ("    B   = %d:", B);
+			//$display ("    Sum = %d:", Sum);
 			testcase =	testcase + 1;
+
+			if(right_answer !== Sum)
+			begin
+				$display("A   = %d , B   = %d , Sum   = %d , Right Answer   = %d", A,B,Sum,right_answer)
+			end
 		end
 
 	end
