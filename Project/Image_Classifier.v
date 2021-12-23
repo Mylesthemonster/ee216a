@@ -8692,7 +8692,7 @@ always @(GlobalReset, N_DONE, counter) begin
     N_RST = 0;
 	if(GlobalReset) begin //technically not synchronous but IDK how to avoid this without causing the multi-driver thing.
 		counter = 0;
-        current_max = 26'b10000000000000000000000000;
+        $signed(current_max) = 26'b10000000000000000000000000;
         max_index = 0;
 	end
 	else begin

@@ -21,6 +21,12 @@ set alib_library_analysis_path "./alib-52/"
 #####
 # Read the gate-level verilog files
 ################################################################################
+analyze -format verilog {SynLib.v}
+analyze -format verilog {saed32nm.v}
+analyze -format verilog {FixedPointAdder.v}
+analyze -format verilog {FixedPointMultiplier.v}
+analyze -format verilog {PipelinedMultAccumulate.v}
+analyze -format verilog {Neuron.v}
 analyze -format verilog {Image_Classifier.v}
 set DESIGN_NAME Image_Classifier
 
